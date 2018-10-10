@@ -205,6 +205,17 @@ export default class Grid extends Component {
     tabIndex: 0
   };
 
+  getCellPosition (x, y) {
+    const { columnCount, rowCount } = this.props
+
+    if (x > columnCount || y > rowCount || x < 0 || y < 0) return null
+
+    return ({
+      x: this._columnSizeAndPositionManager.getSizeAndPositionOfCell(x),
+      y: this._rowSizeAndPositionManager.getSizeAndPositionOfCell(y)
+    })
+  }
+
   constructor (props, context) {
     super(props, context)
 
@@ -224,6 +235,7 @@ export default class Grid extends Component {
     this._debounceScrollEndedCallback = this._debounceScrollEndedCallback.bind(this)
     this._invokeOnGridRenderedHelper = this._invokeOnGridRenderedHelper.bind(this)
     this._onScroll = this._onScroll.bind(this)
+    this.getCellPosition = this.getCellPosition.bind(this)
     this._updateScrollLeftForScrollToColumn = this._updateScrollLeftForScrollToColumn.bind(this)
     this._updateScrollTopForScrollToRow = this._updateScrollTopForScrollToRow.bind(this)
 
@@ -523,6 +535,22 @@ export default class Grid extends Component {
     this._calculateChildrenToRender(nextProps, nextState)
   }
 
+  renderOverlay () {
+    if (this.props.renderOverlay) {
+      return this.props.renderOverlay({
+        x: this._renderedColumnStartIndex,
+        xend: this._renderedColumnStopIndex,
+        y: this._renderedRowStartIndex,
+        yend: this._renderedRowStopIndex,
+        getCellPosition: this.getCellPosition,
+        left: this.state.scrollLeft,
+        top: this.state.scrollTop
+      })
+    }
+
+    return null
+  }
+
   render () {
     const {
       autoContainerWidth,
@@ -608,6 +636,7 @@ export default class Grid extends Component {
             }}
           >
             {childrenToDisplay}
+            {this.renderOverlay()}
           </div>
         }
         {showNoContentRenderer &&

@@ -18,7 +18,11 @@ export default class MultiGrid extends Component {
     styleBottomLeftGrid: PropTypes.object.isRequired,
     styleBottomRightGrid: PropTypes.object.isRequired,
     styleTopLeftGrid: PropTypes.object.isRequired,
-    styleTopRightGrid: PropTypes.object.isRequired
+    styleTopRightGrid: PropTypes.object.isRequired,
+    renderOverlayBottomRight: PropTypes.func,
+    renderOverlayBottomLeft: PropTypes.func,
+    renderOverlayTopRight: PropTypes.func,
+    renderOverlayTopLeft: PropTypes.func
   };
 
   static defaultProps = {
@@ -28,7 +32,11 @@ export default class MultiGrid extends Component {
     styleBottomLeftGrid: {},
     styleBottomRightGrid: {},
     styleTopLeftGrid: {},
-    styleTopRightGrid: {}
+    styleTopRightGrid: {},
+    renderOverlayBottomRight: null,
+    renderOverlayBottomLeft: null,
+    renderOverlayTopRight: null,
+    renderOverlayTopLeft: null
   };
 
   constructor (props, context) {
@@ -434,6 +442,7 @@ export default class MultiGrid extends Component {
         scrollTop={scrollTop}
         style={this._bottomLeftGridStyle}
         width={this._getLeftGridWidth(props)}
+        renderOverlay={this.props.renderOverlayBottomLeft}
       />
     )
   }
@@ -463,6 +472,7 @@ export default class MultiGrid extends Component {
         scrollToRow={scrollToRow - fixedRowCount}
         style={this._bottomRightGridStyle}
         width={this._getRightGridWidth(props)}
+        renderOverlay={this.props.renderOverlayBottomRight}
       />
     )
   }
@@ -486,6 +496,7 @@ export default class MultiGrid extends Component {
         rowCount={fixedRowCount}
         style={this._topLeftGridStyle}
         width={this._getLeftGridWidth(props)}
+        renderOverlay={this.props.renderOverlayTopLeft}
       />
     )
   }
@@ -514,6 +525,7 @@ export default class MultiGrid extends Component {
         scrollLeft={scrollLeft}
         style={this._topRightGridStyle}
         width={this._getRightGridWidth(props)}
+        renderOverlay={this.props.renderOverlayTopRight}
       />
     )
   }
